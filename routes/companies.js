@@ -10,9 +10,12 @@ let router = new express.Router();
 router.get("/", async function (req, res, next) {
     try {
       const result = await db.query(
-            `SELECT code, name 
-             FROM companies 
-             ORDER BY name`
+            `SELECT c.code, 
+                    c.name,
+                    i.ind_code
+             FROM companies AS c
+                INNER JOIN industry_company AS i ON (c.code = i.comp_code)
+             `
       );
   
       return res.json({"companies": result.rows});
